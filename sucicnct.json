@@ -1,0 +1,5 @@
+{
+    "preset": "plonky2",
+    "build": "cargo run succinct/main.rs",
+    "prove": "cargo run succinct/main.rs --bin plonky2 --release -- --bench"
+}
