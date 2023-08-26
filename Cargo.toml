@@ -1,0 +1,20 @@
+[package]
+name = "plonky2x-example"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+ethers = "2.0.9"
+plonky2 = { git = "https://github.com/mir-protocol/plonky2.git", default-features = false}
+plonky2x = { path = "../../go/sdk/plonky2x" }
+# plonky2x = { git = "https://github.com/succinctlabs/succinctx", version = "0.1.0" }
+
+
+[[bin]]
+name = "circuit"
+path = "circuit/lib.rs"
+
+[dev-dependencies]
+plonky2 = { git = "https://github.com/mir-protocol/plonky2.git", features = ["gate_testing"]}

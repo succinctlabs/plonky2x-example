@@ -1,53 +1,59 @@
-use succinctlabs::circuit::CircuitBuilderX;
-use succinctlabs::circuit::CircuitTrait;
+use std::env;
 
-pub struct MyCircuit {
-}
+use plonky2::field::extension::Extendable;
+use plonky2::hash::hash_types::RichField;
+use plonky2::plonk::config::{AlgebraicHasher, GenericConfig};
+use plonky2x::backend::circuit::Circuit;
+use plonky2x::backend::function::CircuitFunction;
 
-impl CircuitTrait for MyCircuit {
-    pub fn define(builder: CircuitBuilderX) {
-        let l1_block_hash = builder.evm_read::<Bytes32Variable>();
-        let address = builder.evm_read::<Address>();
-        let location = builder.evm_read::<Bytes32Variable>();
-        let value = builder.eth_getStorageAt(l1_block_hash, address, location);
-        builder.evm_write(value);
+use plonky2x::frontend::vars::U32Variable;
+use plonky2x::prelude::CircuitBuilder;
+use plonky2x::prelude::Variable;
+
+pub struct SimpleCircuit {}
+
+impl CircuitFunction for SimpleCircuit {
+    fn build<F, C, const D: usize>() -> Circuit<F, C, D>
+    where
+        F: RichField + Extendable<D>,
+        C: GenericConfig<D, F = F> + 'static,
+        <C as GenericConfig<D>>::Hasher: AlgebraicHasher<F>,
+    {
+        let mut builder = CircuitBuilder::<F, D>::new();
+
+        let a = builder.evm_read::<U32Variable>();
+        let b = builder.evm_read::<U32Variable>();
+        let c = builder.api.add(a.0 .0, b.0 .0);
+
+        builder.evm_write(U32Variable(Variable(c)));
+        builder.build::<C>()
     }
 }
 
-mod test {
+fn main() {
+    env::set_var("RUST_LOG", "info");
+    SimpleCircuit::cli();
+}
+
+#[cfg(test)]
+mod tests {
+    use plonky2x::prelude::{GoldilocksField, PoseidonGoldilocksConfig};
+
     use super::*;
-    use succinctlabs::circuit::CircuitBuilderX;
-    use ethers::core::types::{Address, H256};
 
-    #[test]
-    fn test_get_proof() {
-        // TODO test the getting of a simple storage proof
-    }
+    type F = GoldilocksField;
+    type C = PoseidonGoldilocksConfig;
+    const D: usize = 2;
 
     #[test]
     fn test_circuit() {
-        let mut builder = CircuitBuilderX::new();
-        MyCircuit::define(&mut builder);
-
-        // Build your circuit.
-        let circuit = builder.build::<PoseidonGoldilocksConfig>();
-
-        // To test your circuit, write to the inputs
-        // Note this needs to be done after building the circuit.
+        let circuit = SimpleCircuit::build::<F, C, D>();
         let mut input = circuit.input();
-        input.write::<Byte32Variable>();
-        input.write::<AddressVariable>();
-        input.write::<Bytes32Variable>();
-
-        // Generate a proof.
+        input.evm_write::<U32Variable>(0x12345678);
+        input.evm_write::<U32Variable>(0x01234567);
         let (proof, output) = circuit.prove(&input);
-
-        // Verify proof.
         circuit.verify(&proof, &input, &output);
-
-        // Read output.
-        let sum = output.read::<Bytes32Variable>();
-        println!("{}", sum.0);
+        let sum = output.evm_read::<U32Variable>();
+        assert_eq!(sum, 0x12345678 + 0x01234567);
     }
 }
-
