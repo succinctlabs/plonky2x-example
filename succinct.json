@@ -1,5 +1,6 @@
 {
     "preset": "plonky2",
-    "build": "cargo run succinct/main.rs",
-    "prove": "cargo run succinct/main.rs --bin plonky2 --release -- --bench"
+    "build_command": "rustup override set nightly && mkdir build && cargo run --release build && mv ./target/release/circuit ./build/circuit",
+    "prove_command": "./build/circuit prove",
+    "input_type": "json"
 }
