@@ -9,7 +9,7 @@ edition = "2021"
 ethers = "2.0.9"
 plonky2 = { git = "https://github.com/mir-protocol/plonky2.git", default-features = false}
 # plonky2x = { path = "../../go/sdk/plonky2x" }
-plonky2x = { git = "ssh://git@github.com/succinctlabs/succinctx.git", version = "0.1.0" }
+plonky2x = { git = "https://github.com/succinctlabs/succinctx.git", version = "0.1.0", branch = "chris/u256" }
 
 
 [[bin]]
