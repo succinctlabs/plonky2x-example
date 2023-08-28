@@ -11,9 +11,9 @@ use plonky2x::frontend::vars::{Bytes32Variable, U32Variable};
 use plonky2x::prelude::CircuitBuilder;
 use plonky2x::prelude::Variable;
 
-pub struct Function {}
+pub struct U32AddFunction {}
 
-impl CircuitFunction for Function {
+impl CircuitFunction for U32AddFunction {
     fn build<F, C, const D: usize>() -> Circuit<F, C, D>
     where
         F: RichField + Extendable<D>,
@@ -31,9 +31,9 @@ impl CircuitFunction for Function {
     }
 }
 
-pub struct StorageProofCircuit {}
+pub struct StorageProofFunction {}
 
-impl CircuitFunction for StorageProofCircuit {
+impl CircuitFunction for StorageProofFunction {
     fn build<F, C, const D: usize>() -> Circuit<F, C, D>
     where
         F: RichField + Extendable<D>,
@@ -58,7 +58,7 @@ impl CircuitFunction for StorageProofCircuit {
 
 fn main() {
     env::set_var("RUST_LOG", "info");
-    Function::cli();
+    U32AddFunction::cli();
 }
 
 #[cfg(test)]
@@ -74,7 +74,7 @@ mod tests {
 
     #[test]
     fn test_circuit() {
-        let circuit = Function::build::<F, C, D>();
+        let circuit = U32AddFunction::build::<F, C, D>();
         let mut input = circuit.input();
         input.evm_write::<U32Variable>(0x12345678);
         input.evm_write::<U32Variable>(0x01234567);
@@ -86,7 +86,7 @@ mod tests {
 
     #[test]
     fn test_storage_circuit() {
-        let circuit = StorageProofCircuit::build::<F, C, D>();
+        let circuit = StorageProofFunction::build::<F, C, D>();
         let mut input = circuit.input();
 
         input.evm_write::<Bytes32Variable>(
