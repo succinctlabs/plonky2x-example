@@ -803,6 +803,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "dotenv"
+version = "0.15.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "77c90badedccf4105eca100756a0b1289e191f6fcbdadd3cee1d2f614f97da8f"
+
+[[package]]
 name = "dunce"
 version = "1.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2536,13 +2542,14 @@ checksum = "5696e2e2a6bb5c48a6e33fb0dd4d20d0a9472784b709964f337f224e99bd6d06"
 [[package]]
 name = "plonky2x"
 version = "0.1.0"
-source = "git+https://github.com/succinctlabs/succinctx.git#0a5e4f1c08236d7f6ad46971e899a18627fb21f5"
+source = "git+https://github.com/succinctlabs/succinctx.git?branch=uma/implement-ssz-builder#1f8b354bc2ccd573a39ea0e2f4de9afe24520f1c"
 dependencies = [
  "anyhow",
  "array-macro",
  "clap",
  "curta",
  "curve25519-dalek",
+ "dotenv",
  "env_logger",
  "ethers",
  "hex",

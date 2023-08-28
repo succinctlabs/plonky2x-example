@@ -8,7 +8,7 @@ edition = "2021"
 [dependencies]
 ethers = "2.0.9"
 plonky2 = { git = "https://github.com/mir-protocol/plonky2.git", default-features = false}
-plonky2x = { git = "https://github.com/succinctlabs/succinctx.git", version = "uma/implement-ssz-builder" }
+plonky2x = { git = "https://github.com/succinctlabs/succinctx.git", branch = "uma/implement-ssz-builder" }
 
 
 [[bin]]
