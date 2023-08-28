@@ -58,7 +58,7 @@ impl CircuitFunction for StorageProofCircuit {
 
 fn main() {
     env::set_var("RUST_LOG", "info");
-    StorageProofCircuit::cli();
+    SimpleCircuit::cli();
 }
 
 #[cfg(test)]
