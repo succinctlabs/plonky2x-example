@@ -4,10 +4,6 @@ pragma solidity ^0.8.16;
 // import {IFunctionGateway} from "@succinct-sdk/interfaces/IFunctionGateway.sol";
 // import {OutputReader} from "@succinct-sdk/libraries/OutputReader.sol";
 
-interface L1Block {
-    function hash() external view returns (bytes32);
-}
-
 interface IFunctionGateway {
     function request(
         bytes32 functionId,
@@ -17,7 +13,7 @@ interface IFunctionGateway {
     ) external payable;
 }
 
-contract CrossChainStorageSlot {
+contract SimpleCircuit {
     uint256 public nextRequestId = 1;
     address public constant FUNCTION_GATEWAY =
         0x852a94F8309D445D27222eDb1E92A4E83DdDd2a8;

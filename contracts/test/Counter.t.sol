@@ -2,28 +2,15 @@
 pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
-// import "forge-std/Vm.sol";
+
 import "../src/Counter.sol";
 
-contract MockL1Contract {
-    uint256 public number;
-    bytes32 public hash_;
-
-    function setBlock(
-        bytes32 hash_,
-        uint256 number
-    ) external view returns (bytes32) {
-        hash_ = hash_;
-        number = number;
-    }
-}
-
-contract CrossChainStorageSlotTest is Test {
-    CrossChainStorageSlot public counter;
+contract SimpleCircuitTest is Test {
+    SimpleCircuit public simple;
     event CallbackReceived(uint256 requestId, uint32 a_plus_b);
 
     function setUp() public {
-        counter = new CrossChainStorageSlot();
+        simple = new SimpleCircuit();
     }
 
     function testCall() public {
@@ -32,7 +19,6 @@ contract CrossChainStorageSlotTest is Test {
         bytes memory context = abi.encode(uint256(1));
         vm.expectEmit();
         emit CallbackReceived(1, uint32(3));
-        counter.handleCallback(output, context);
-        // assertEq(counter.number(), 1);
+        simple.handleCallback(output, context);
     }
 }

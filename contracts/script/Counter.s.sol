@@ -7,8 +7,8 @@ import "../src/Counter.sol";
 contract CounterScript is Script {
     function run() public {
         vm.broadcast();
-        // CrossChainStorageSlot c = new CrossChainStorageSlot();
-        CrossChainStorageSlot my_contract = CrossChainStorageSlot(
+        // SimpleCircuit my_contract = new SimpleCircuit();
+        SimpleCircuit my_contract = SimpleCircuit(
             address(0x2F3E76EFD9Dd0a99B205b477d4f2e440d574cdc9)
         );
         my_contract.requestAddition{value: 30 gwei * 1_000_000}(2, 3);

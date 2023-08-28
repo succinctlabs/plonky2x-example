@@ -2,18 +2,9 @@
 pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
-import "../src/CrossChainStorage.sol";
 
-// https://github.com/ethereum-optimism/optimism/blob/develop/packages/contracts-bedrock/src/L2/L1Block.sol
-contract MockL1Contract {
-    uint64 public number;
-    bytes32 public hash;
-
-    function setBlock(uint64 _number, bytes32 _hash) external {
-        hash = _hash;
-        number = _number;
-    }
-}
+import {CrossChainStorageSlot} from "../src/CrossChainStorage.sol";
+import {MockL1Contract} from "./Mock.sol";
 
 contract CrossChainStorageSlotTest is Test {
     MockL1Contract public l1block;
@@ -40,7 +31,7 @@ contract CrossChainStorageSlotTest is Test {
         address addr = 0x55032650b14df07b85bF18A3a3eC8E0Af2e028d5;
         bytes32 location = 0xad3228b676f7d3cd4284a5443f17f1962b36e491b30a40b2405849e597ba5fb5;
         bytes32 storage_value = 0x0000000000000000000000dd4bc51496dc93a0c47008e820e0d80745476f2201;
-        // TODO: have to use vm.etch with the MockGateway here
+        // TODO: have to use vm.etch with the MockGateway here to test
         // mirror.requestMirrorSlot{value: 30 gwei * 1_000_000}(addr, location);
 
         vm.expectEmit();
