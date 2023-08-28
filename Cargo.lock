@@ -2542,7 +2542,7 @@ checksum = "5696e2e2a6bb5c48a6e33fb0dd4d20d0a9472784b709964f337f224e99bd6d06"
 [[package]]
 name = "plonky2x"
 version = "0.1.0"
-source = "git+https://github.com/succinctlabs/succinctx.git?branch=uma/implement-ssz-builder#1f8b354bc2ccd573a39ea0e2f4de9afe24520f1c"
+source = "git+https://github.com/succinctlabs/succinctx.git?branch=main#0a6b4ae99daee2d6e45f5acd747cbd73fab4800e"
 dependencies = [
  "anyhow",
  "array-macro",
@@ -2569,6 +2569,7 @@ dependencies = [
 name = "plonky2x-example"
 version = "0.1.0"
 dependencies = [
+ "dotenv",
  "ethers",
  "plonky2",
  "plonky2x",
