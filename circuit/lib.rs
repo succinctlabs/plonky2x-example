@@ -115,5 +115,7 @@ mod tests {
                 .parse::<H256>()
                 .unwrap()
         );
+
+        let _ = circuit.serialize().unwrap();
     }
 }
