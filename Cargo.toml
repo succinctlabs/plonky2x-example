@@ -14,7 +14,7 @@ dotenv = "0.15.0"
 
 [[bin]]
 name = "circuit"
-path = "circuit/lib.rs"
+path = "circuit/main.rs"
 
 [dev-dependencies]
 plonky2 = { git = "https://github.com/mir-protocol/plonky2.git", features = ["gate_testing"]}
