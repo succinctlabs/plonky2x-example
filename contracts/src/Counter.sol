@@ -18,7 +18,7 @@ contract SimpleCircuit {
     address public constant FUNCTION_GATEWAY =
         0x852a94F8309D445D27222eDb1E92A4E83DdDd2a8;
     bytes32 public constant FUNCTION_ID =
-        0xe58700a5c991de3a6032fcd489d8711341dda3ae776aff1c163315ffbf7fd92b;
+        0x7137a31b094de860eff8bdacda9fe614d5008c6f40b5dff2694e09b61b66ca94;
 
     event CallbackReceived(uint256 requestId, uint32 a_plus_b);
 
