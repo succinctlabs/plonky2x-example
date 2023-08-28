@@ -8,10 +8,9 @@ import "../src/Counter.sol";
 contract CounterScript is Script {
     function run() public {
         vm.broadcast();
-        // SimpleCircuit my_contract = new SimpleCircuit();
-        SimpleCircuit my_contract = SimpleCircuit(
-            address(0x2F3E76EFD9Dd0a99B205b477d4f2e440d574cdc9)
+        SimpleCircuit s = SimpleCircuit(
+            address(0xA8963BB3cAfdd188e323cff40f667E875e3C9fC7)
         );
-        my_contract.requestAddition{value: 30 gwei * 1_000_000}(2, 3);
+        s.requestAddition{value: 30 gwei * 1_000_000}(2, 3);
     }
 }
