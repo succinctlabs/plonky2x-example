@@ -9,7 +9,6 @@ use std::env;
 use plonky2x::frontend::eth::vars::AddressVariable;
 use plonky2x::frontend::vars::{Bytes32Variable, U32Variable};
 use plonky2x::prelude::CircuitBuilder;
-use plonky2x::prelude::Variable;
 
 pub struct U32AddFunction {}
 
@@ -24,9 +23,9 @@ impl CircuitFunction for U32AddFunction {
 
         let a = builder.evm_read::<U32Variable>();
         let b = builder.evm_read::<U32Variable>();
-        let c = builder.api.add(a.0 .0, b.0 .0);
+        let c = builder.add(a, b);
 
-        builder.evm_write(U32Variable(Variable(c)));
+        builder.evm_write(c);
         builder.build::<C>()
     }
 }
