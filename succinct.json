@@ -1,6 +1,6 @@
 {
     "preset": "plonky2",
-    "build_command": "rustup override set nightly && mkdir build && RUST_BACKTRACE=1 cargo run --release build && mv ./target/release/circuit ./build/circuit",
+    "build_command": "rustup override set nightly && mkdir build && cargo run --release build && mv ./target/release/circuit ./build/circuit",
     "prove_command": "./build/circuit prove --input-json input.json",
     "input_type": "json"
 }
