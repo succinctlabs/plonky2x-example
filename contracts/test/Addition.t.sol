@@ -3,10 +3,11 @@ pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
 
-import "../src/Counter.sol";
+import "../src/Addition.sol";
 
 contract SimpleCircuitTest is Test {
     SimpleCircuit public simple;
+
     event CallbackReceived(uint256 requestId, uint32 a_plus_b);
 
     function setUp() public {
