@@ -23,7 +23,7 @@ impl CircuitFunction for U32AddFunction {
 
         let a = builder.evm_read::<U32Variable>();
         let b = builder.evm_read::<U32Variable>();
-        let c = builder.add(a, b);
+        let c = builder.mul(a, b);
 
         builder.evm_write(c);
         builder.build::<C>()
@@ -75,12 +75,12 @@ mod tests {
     fn test_circuit() {
         let circuit = U32AddFunction::build::<F, C, D>();
         let mut input = circuit.input();
-        input.evm_write::<U32Variable>(0x12345678);
-        input.evm_write::<U32Variable>(0x01234567);
+        input.evm_write::<U32Variable>(0x00000012);
+        input.evm_write::<U32Variable>(0x00000035);
         let (proof, output) = circuit.prove(&input);
         circuit.verify(&proof, &input, &output);
         let sum = output.evm_read::<U32Variable>();
-        assert_eq!(sum, 0x12345678 + 0x01234567);
+        assert_eq!(sum, 0x00000012 * 0x00000035);
     }
 
     #[test]
