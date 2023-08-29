@@ -40,6 +40,6 @@ After a few minutes, the deployment should be finished. Go back to Deployments a
 
 ### Deploying your smart contract
 
-1. Deploy your smart contract by using `./deployAddition.sh` in `contracts/`
+1. Deploy your smart contract by using `cd contracts` and `./deployAddition.sh`
 2. Edit `contracts/script/Addition.s.sol` with your contract's deployed address
 3. Request a proof by using `./requestAddition.sh` in `contracts/` to trigger a request on-chain
