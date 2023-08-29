@@ -58,7 +58,7 @@ impl CircuitFunction for StorageProofFunction {
 
 fn main() {
     env::set_var("RUST_LOG", "info");
-    U32AddFunction::cli();
+    StorageProofFunction::cli();
 }
 
 #[cfg(test)]
