@@ -1,1 +1,2 @@
 succinctx/=lib/succinctx/contracts/src
+forge-std/=lib/succinctx/contracts/lib/forge-std/src/
