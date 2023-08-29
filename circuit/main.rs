@@ -4,6 +4,7 @@ use plonky2::hash::hash_types::RichField;
 use plonky2::plonk::config::{AlgebraicHasher, GenericConfig};
 use plonky2x::backend::circuit::Circuit;
 use plonky2x::backend::function::CircuitFunction;
+use plonky2x::utils::bytes32;
 use std::env;
 
 use plonky2x::frontend::eth::vars::AddressVariable;
@@ -31,26 +32,39 @@ impl CircuitFunction for U32AddFunction {
     }
 }
 
-pub struct StorageProofFunction {}
+pub struct Keccak256MerkleProofFunction {}
 
-impl CircuitFunction for StorageProofFunction {
+impl CircuitFunction for Keccak256MerkleProofFunction {
     fn build<F, C, const D: usize>() -> Circuit<F, C, D>
     where
         F: RichField + Extendable<D>,
         C: GenericConfig<D, F = F> + 'static,
         <C as GenericConfig<D>>::Hasher: AlgebraicHasher<F>,
     {
-        dotenv::dotenv().ok();
-        let rpc_url = env::var("RPC_1").unwrap();
-        let provider = Provider::<Http>::try_from(rpc_url).unwrap();
         let mut builder = CircuitBuilder::<F, D>::new();
-        builder.set_execution_client(provider);
 
-        let block_hash = builder.evm_read::<Bytes32Variable>();
-        let address = builder.evm_read::<AddressVariable>();
-        let location = builder.evm_read::<Bytes32Variable>();
-        let storage_value = builder.eth_get_storage_at(address, location, block_hash);
-        builder.evm_write(storage_value);
+        // Imagine a binary merkle tree with leaves 0, 1, 2, 3 using the keccak256 hash function
+        // on 32 bit words.
+
+        let leaf = builder.constant::<Bytes32Variable>(bytes32!(
+            "0000000000000000000000000000000000000000000000000000000000000000"
+        ));
+        let root = builder.constant::<Bytes32Variable>(bytes32!(
+            "971a07f522aa78292e76c6f7868e95212b75e68c94ca077e6207722795d80a61"
+        ));
+        let siblings = [
+            builder.constant::<Bytes32Variable>(bytes32!(
+                "5fe7f977e71dba2ea1a68e21057beebb9be2ac30c6410aa38d4f3fbe41dcffd2"
+            )),
+            builder.constant::<Bytes32Variable>(bytes32!(
+                "2b07d07815e57c23883128aa268a683b3b39aca921fa5f247e9a30c4035d7107"
+            )),
+        ];
+
+        // TODO: Verify the merkle proof using builder.keccak256 and builder.assert_is_equal.
+        // Note that assert_is_equal operates over Variable, not Bytes32Variable so for now you
+        // will need to do something like: builder.assert_is_equal(a.variables(), b.variables()) if
+        // a and b are of type Bytes32Variable.
 
         builder.build::<C>()
     }
@@ -63,7 +77,6 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    use ethers::types::{Address, H256};
     use plonky2x::prelude::{GoldilocksField, PoseidonGoldilocksConfig};
 
     use super::*;
@@ -85,35 +98,10 @@ mod tests {
     }
 
     #[test]
-    fn test_storage_circuit() {
-        let circuit = StorageProofFunction::build::<F, C, D>();
-        let mut input = circuit.input();
-
-        input.evm_write::<Bytes32Variable>(
-            "0x281dc31bb78779a1ede7bf0f4d2bc5f07ddebc9f9d1155e413d8804384604bbe"
-                .parse::<H256>()
-                .unwrap(),
-        );
-        input.evm_write::<AddressVariable>(
-            "0x55032650b14df07b85bF18A3a3eC8E0Af2e028d5"
-                .parse::<Address>()
-                .unwrap(),
-        );
-        input.evm_write::<Bytes32Variable>(
-            "0xad3228b676f7d3cd4284a5443f17f1962b36e491b30a40b2405849e597ba5fb5"
-                .parse::<H256>()
-                .unwrap(),
-        );
-
+    fn test_keccak256_merkle_proof() {
+        let circuit = Keccak256MerkleProofFunction::build::<F, C, D>();
+        let input = circuit.input();
         let (proof, output) = circuit.prove(&input);
-
         circuit.verify(&proof, &input, &output);
-        let storage_value = output.evm_read::<Bytes32Variable>();
-        assert_eq!(
-            storage_value,
-            "0x0000000000000000000000dd4bc51496dc93a0c47008e820e0d80745476f2201"
-                .parse::<H256>()
-                .unwrap()
-        );
     }
 }
