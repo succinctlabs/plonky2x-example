@@ -50,14 +50,14 @@ impl CircuitFunction for Keccak256MerkleProofFunction {
             "0000000000000000000000000000000000000000000000000000000000000000"
         ));
         let root = builder.constant::<Bytes32Variable>(bytes32!(
-            "971a07f522aa78292e76c6f7868e95212b75e68c94ca077e6207722795d80a61"
+            "2c24f92f65cdd0fde0264c1f41fadf17cb35cdffeaca769e5673e72b072be707"
         ));
         let siblings = [
             builder.constant::<Bytes32Variable>(bytes32!(
-                "5fe7f977e71dba2ea1a68e21057beebb9be2ac30c6410aa38d4f3fbe41dcffd2"
+                "b10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6"
             )),
             builder.constant::<Bytes32Variable>(bytes32!(
-                "2b07d07815e57c23883128aa268a683b3b39aca921fa5f247e9a30c4035d7107"
+                "c5fd106a8e5214837c622e5fdef112b1d83ad6de66beafb53451c77843c9d04e"
             )),
         ];
 
