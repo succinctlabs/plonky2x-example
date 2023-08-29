@@ -9,7 +9,6 @@ use std::env;
 use plonky2x::frontend::eth::vars::AddressVariable;
 use plonky2x::frontend::vars::{Bytes32Variable, U32Variable};
 use plonky2x::prelude::CircuitBuilder;
-use plonky2x::prelude::Variable;
 
 pub struct U32AddFunction {}
 
@@ -24,9 +23,9 @@ impl CircuitFunction for U32AddFunction {
 
         let a = builder.evm_read::<U32Variable>();
         let b = builder.evm_read::<U32Variable>();
-        let c = builder.api.add(a.0 .0, b.0 .0);
+        let c = builder.mul(a, b);
 
-        builder.evm_write(U32Variable(Variable(c)));
+        builder.evm_write(c);
         builder.build::<C>()
     }
 }
@@ -58,7 +57,7 @@ impl CircuitFunction for StorageProofFunction {
 
 fn main() {
     env::set_var("RUST_LOG", "info");
-    U32AddFunction::cli();
+    StorageProofFunction::cli();
 }
 
 #[cfg(test)]
@@ -76,12 +75,12 @@ mod tests {
     fn test_circuit() {
         let circuit = U32AddFunction::build::<F, C, D>();
         let mut input = circuit.input();
-        input.evm_write::<U32Variable>(0x12345678);
-        input.evm_write::<U32Variable>(0x01234567);
+        input.evm_write::<U32Variable>(0x00000012);
+        input.evm_write::<U32Variable>(0x00000035);
         let (proof, output) = circuit.prove(&input);
         circuit.verify(&proof, &input, &output);
         let sum = output.evm_read::<U32Variable>();
-        assert_eq!(sum, 0x12345678 + 0x01234567);
+        assert_eq!(sum, 0x00000012 * 0x00000035);
     }
 
     #[test]

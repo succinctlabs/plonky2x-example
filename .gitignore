@@ -1,2 +1,6 @@
 /target
 .env
+
+input.json
+output.json
+build/
