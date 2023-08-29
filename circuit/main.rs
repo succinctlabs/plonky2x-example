@@ -43,6 +43,9 @@ impl CircuitFunction for Keccak256MerkleProofFunction {
     {
         let mut builder = CircuitBuilder::<F, D>::new();
 
+        // Imagine a binary merkle tree with leaves 0, 1, 2, 3 using the keccak256 hash function
+        // on 32 bit words.
+
         let leaf = builder.constant::<Bytes32Variable>(bytes32!(
             "0000000000000000000000000000000000000000000000000000000000000000"
         ));
@@ -57,6 +60,11 @@ impl CircuitFunction for Keccak256MerkleProofFunction {
                 "2b07d07815e57c23883128aa268a683b3b39aca921fa5f247e9a30c4035d7107"
             )),
         ];
+
+        // TODO: Verify the merkle proof using builder.keccak256 and builder.assert_is_equal.
+        // Note that assert_is_equal operates over Variable, not Bytes32Variable so for now you
+        // will need to do something like: builder.assert_is_equal(a.variables(), b.variables()) if
+        // a and b are of type Bytes32Variable.
 
         builder.build::<C>()
     }
